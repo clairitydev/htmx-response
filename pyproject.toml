@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "htmx-response"
+version = "0.1.0"
+description = ""
+authors = ["Gabe Levasseur <11285350+GabeL7r@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
