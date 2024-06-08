@@ -30,6 +30,7 @@ def get_htmx_route(
                     layout = templates.env.get_template(base_template)
                     context = json.loads(response.body.decode('utf-8'))
                     context['request'] = request
+                    context['layout'] = layout
                     return templates.TemplateResponse(
                         response.headers.get('htmx-template'),
                         context=context
