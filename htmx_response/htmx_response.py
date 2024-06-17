@@ -2,6 +2,7 @@ from fastapi import Request, Response
 from fastapi.responses import JSONResponse
 from accept_types import get_best_match
 from fastapi.templating import Jinja2Templates
+import jinja2
 from pydantic import BaseModel
 from typing import Mapping
 
@@ -30,8 +31,17 @@ class HTMXResponse(Response):
         )
 
         if return_type == 'text/html':
-            print(self.directory)
-            templates = Jinja2Templates(directory=self.directory)
+            if 'template_dirs' in self.request.state.context:
+                self.request.state.context['template_dirs'].append(self.directory)
+                template_dirs = self.request.state.context['template_dirs']
+            else:
+                template_dirs = [self.directory]
+            print(template_dirs)
+            env = jinja2.Environment(
+                loader=jinja2.ChoiceLoader([jinja2.FileSystemLoader(dir) for dir in template_dirs])
+            )
+            templates = Jinja2Templates(env=env)
+            #templates = Jinja2Templates(directory=self.directory)
 
             # NOTE: you can add extra parameters to the request.state
             # to be rendered in your jinja template
