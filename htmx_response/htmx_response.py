@@ -31,12 +31,12 @@ class HTMXResponse(Response):
         )
 
         if return_type == 'text/html':
+            self.media_type = 'text/html'
             if 'template_dirs' in self.request.state.context:
                 self.request.state.context['template_dirs'].append(self.directory)
                 template_dirs = self.request.state.context['template_dirs']
             else:
                 template_dirs = [self.directory]
-            print(template_dirs)
             env = jinja2.Environment(
                 loader=jinja2.ChoiceLoader([jinja2.FileSystemLoader(dir) for dir in template_dirs])
             )
@@ -60,6 +60,7 @@ class HTMXResponse(Response):
                 status_code=self.status_code
             ).body
         elif return_type == 'application/json':
+            self.media_type = 'application/json'
             if isinstance(self.content, BaseModel):
                 data = self.content.model_dump(mode='json')
             elif self.content is None:
